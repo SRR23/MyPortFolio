@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   profile,
   aboutParagraphs,
@@ -40,7 +40,8 @@ function MenuIcon({ open }) {
 }
 
 /**
- * Shows the profile photo from /public, or initials if the file is missing or fails to load.
+ * Hero portrait: framed for dark UI — soft vignette helps white studio backgrounds
+ * blend into the page without editing the source image.
  */
 function ProfilePhoto({ src, alt, displayName }) {
   const [loadFailed, setLoadFailed] = useState(false)
@@ -54,7 +55,7 @@ function ProfilePhoto({ src, alt, displayName }) {
   if (loadFailed) {
     return (
       <div
-        className="flex aspect-[4/5] w-full items-center justify-center bg-slate-800 text-5xl font-semibold tracking-tight text-teal-300"
+        className="flex aspect-[4/5] w-full items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 text-5xl font-semibold tracking-tight text-teal-300"
         aria-label={alt}
       >
         {initials || '?'}
@@ -63,15 +64,32 @@ function ProfilePhoto({ src, alt, displayName }) {
   }
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={480}
-      height={600}
-      className="aspect-[4/5] w-full object-cover"
-      loading="eager"
-      onError={() => setLoadFailed(true)}
-    />
+    <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-900">
+      {/* Slight zoom hides thin light borders; object-top keeps focus on upper portrait */}
+      <img
+        src={src}
+        alt={alt}
+        width={480}
+        height={600}
+        className="h-full w-full scale-[1.04] object-cover object-top transition duration-500 ease-out hover:scale-[1.06] motion-reduce:transition-none motion-reduce:hover:scale-[1.04]"
+        loading="eager"
+        onError={() => setLoadFailed(true)}
+      />
+      {/* Edge vignette: corners / white bleed merge into slate */}
+      <div
+        className="pointer-events-none absolute inset-0 shadow-[inset_0_0_100px_50px_rgba(2,6,23,0.45)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_85%_at_50%_38%,transparent_25%,rgba(15,23,42,0.5)_65%,rgba(2,6,23,0.92)_100%)]"
+        aria-hidden
+      />
+      {/* Bottom wash so any lower white fades into the card */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent"
+        aria-hidden
+      />
+    </div>
   )
 }
 
@@ -115,6 +133,10 @@ function ExternalLinkIcon() {
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    document.title = `${profile.name} · ${profile.title}`
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-300">
@@ -228,14 +250,26 @@ export default function App() {
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-sm lg:mx-0 lg:max-w-none">
-              <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-teal-500/20 via-transparent to-cyan-500/10 blur-2xl" />
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50 shadow-2xl ring-1 ring-white/10">
-                <ProfilePhoto
-                  src={profile.photoSrc}
-                  alt={profile.photoAlt}
-                  displayName={profile.name}
-                />
+            <div className="relative mx-auto w-full max-w-[min(100%,20rem)] lg:max-w-none lg:justify-self-end">
+              {/* Ambient glow behind portrait */}
+              <div
+                className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-teal-500/25 via-teal-600/5 to-cyan-500/15 blur-3xl"
+                aria-hidden
+              />
+              <div
+                className="absolute -inset-3 rounded-[2.25rem] bg-gradient-to-tr from-teal-400/10 to-transparent opacity-70 blur-2xl"
+                aria-hidden
+              />
+
+              {/* Gradient “mat” frame — reads intentional on dark pages */}
+              <div className="relative rounded-[2rem] bg-gradient-to-br from-teal-400/35 via-slate-500/25 to-cyan-400/25 p-[2px] shadow-[0_25px_80px_-12px_rgba(0,0,0,0.65)]">
+                <div className="overflow-hidden rounded-[1.875rem] bg-slate-950 ring-1 ring-white/10">
+                  <ProfilePhoto
+                    src={profile.photoSrc}
+                    alt={profile.photoAlt}
+                    displayName={profile.name}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -506,12 +540,9 @@ export default function App() {
       </main>
 
       <footer className="border-t border-white/5 px-4 py-10 sm:px-6">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-center text-sm text-slate-500 sm:flex-row sm:text-left">
+        <div className="mx-auto max-w-5xl text-center text-sm text-slate-500 sm:text-left">
           <p>
             © {new Date().getFullYear()} {profile.name}. All rights reserved.
-          </p>
-          <p className="font-mono text-xs text-slate-600">
-            Built with React & Tailwind CSS · No backend
           </p>
         </div>
       </footer>
