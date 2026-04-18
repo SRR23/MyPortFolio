@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   profile,
   aboutParagraphs,
+  education,
   expertise,
   experience,
   projects,
@@ -9,6 +10,7 @@ import {
 
 const navLinks = [
   { href: '#about', label: 'About' },
+  { href: '#education', label: 'Education' },
   { href: '#expertise', label: 'Expertise' },
   { href: '#experience', label: 'Experience' },
   { href: '#projects', label: 'Projects' },
@@ -70,6 +72,25 @@ function ProfilePhoto({ src, alt, displayName }) {
       loading="eager"
       onError={() => setLoadFailed(true)}
     />
+  )
+}
+
+function DownloadIcon({ className = 'h-4 w-4' }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+      />
+    </svg>
   )
 }
 
@@ -196,6 +217,14 @@ export default function App() {
                 >
                   Get in touch
                 </a>
+                <a
+                  href={profile.resume.publicPath}
+                  download={profile.resume.downloadFileName}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-teal-500/40 hover:bg-white/[0.07]"
+                >
+                  <DownloadIcon />
+                  Download resume
+                </a>
               </div>
             </div>
 
@@ -232,6 +261,35 @@ export default function App() {
           </div>
         </section>
 
+        {/* Education */}
+        <section
+          id="education"
+          className="scroll-mt-24 border-b border-white/5 px-4 py-20 sm:px-6"
+        >
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
+              Education
+            </h2>
+            <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+              Academic qualifications.
+            </p>
+            <ul className="mt-10 space-y-6">
+              {education.map((entry, index) => (
+                <li
+                  key={index}
+                  className="rounded-2xl border border-white/5 bg-slate-900/40 p-6 shadow-lg shadow-black/20"
+                >
+                  <h3 className="text-lg font-semibold leading-snug text-white">
+                    {entry.degree}
+                  </h3>
+                  <p className="mt-2 text-teal-400/90">{entry.institution}</p>
+                  <p className="mt-1 text-sm text-slate-500">{entry.location}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         {/* Expertise */}
         <section
           id="expertise"
@@ -243,13 +301,6 @@ export default function App() {
             </h2>
             <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
               Skills across the stack.
-            </p>
-            <p className="mt-4 max-w-2xl text-slate-400">
-              A snapshot of technologies and practices I use regularly. Adjust the list in{' '}
-              <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-sm text-teal-200/90">
-                src/data/portfolio.js
-              </code>
-              .
             </p>
             <div className="mt-12 grid gap-6 sm:grid-cols-2">
               {expertise.map((group) => (
@@ -286,23 +337,46 @@ export default function App() {
             <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
               Where I&apos;ve made an impact.
             </p>
-            <ol className="relative mt-14 space-y-12 border-l border-white/10 pl-8">
+            <ol className="relative mt-14 border-l border-white/10 pl-8">
               {experience.map((job) => (
-                <li key={`${job.company}-${job.period}`} className="relative">
-                  <span className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-teal-400 bg-slate-950" />
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{job.role}</h3>
-                      <p className="text-teal-400/90">{job.company}</p>
+                <li
+                  key={`${job.company}-${job.period}`}
+                  className="relative pb-12 last:pb-0"
+                >
+                  <span className="absolute -left-[9px] top-2 z-[1] h-4 w-4 rounded-full border-2 border-teal-400 bg-slate-950 ring-4 ring-slate-950" />
+                  <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-6 shadow-lg shadow-black/10">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-semibold leading-snug text-white">
+                          {job.role}
+                        </h3>
+                        {job.companyUrl ? (
+                          <a
+                            href={job.companyUrl}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="mt-2 inline-flex max-w-full items-center gap-1.5 text-base font-medium text-teal-400 transition hover:text-teal-300"
+                          >
+                            <span className="truncate">{job.company}</span>
+                            <ExternalLinkIcon />
+                          </a>
+                        ) : (
+                          <p className="mt-2 text-base font-medium text-teal-400/90">
+                            {job.company}
+                          </p>
+                        )}
+                      </div>
+                      <p className="shrink-0 text-sm tabular-nums text-slate-500 sm:pt-0.5">
+                        {job.period}
+                      </p>
                     </div>
-                    <p className="text-sm text-slate-500">{job.period}</p>
+                    <p className="mt-4 text-slate-400 leading-relaxed">{job.summary}</p>
+                    <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-400 marker:text-teal-500/80">
+                      {job.highlights.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="mt-3 text-slate-400">{job.summary}</p>
-                  <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-400 marker:text-teal-500/80">
-                    {job.highlights.map((point, index) => (
-                      <li key={index}>{point}</li>
-                    ))}
-                  </ul>
                 </li>
               ))}
             </ol>
@@ -384,12 +458,22 @@ export default function App() {
               <p className="mt-4 max-w-xl text-slate-400">
                 Prefer email? Reach out anytime — I typically respond within a few business days.
               </p>
-              <a
-                href={`mailto:${profile.email}`}
-                className="mt-8 inline-flex rounded-xl bg-teal-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-teal-400"
-              >
-                {profile.email}
-              </a>
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="inline-flex justify-center rounded-xl bg-teal-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-teal-400 sm:justify-start"
+                >
+                  {profile.email}
+                </a>
+                <a
+                  href={profile.resume.publicPath}
+                  download={profile.resume.downloadFileName}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-teal-500/40 hover:bg-white/[0.07]"
+                >
+                  <DownloadIcon />
+                  Download resume
+                </a>
+              </div>
               <div className="mt-10 flex flex-wrap gap-4">
                 <a
                   href={profile.social.github}

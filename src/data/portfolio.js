@@ -17,7 +17,24 @@ export const profile = {
     linkedin: 'https://linkedin.com',
     twitter: 'https://x.com',
   },
+  /**
+   * Resume file in the /public folder. Set publicPath to match your filename
+   * (e.g. /resume.pdf, /CV.pdf). downloadFileName is the name suggested when saving.
+   */
+  resume: {
+    publicPath: '/resume.pdf',
+    downloadFileName: 'Shaidur_Rahman_Resume.pdf',
+  },
 }
+
+/** Academic qualifications */
+export const education = [
+  {
+    degree: 'B.Sc.(Engg.) in Information and Communication Technology',
+    institution: 'Islamic University',
+    location: 'Kushtia, Bangladesh',
+  },
+]
 
 export const aboutParagraphs = [
   'I am a software engineer who enjoys turning complex problems into simple, well-tested solutions. My work spans full-stack features, system design, and collaboration across product and design teams.',
@@ -48,6 +65,8 @@ export const experience = [
   {
     role: 'Backend Developer',
     company: 'Tech Company',
+    /** Company website — shown as a link next to the role. Omit or set null for plain text. */
+    companyUrl: 'https://example.com',
     period: '2025 — Present',
     summary:
       'Lead feature delivery for a high-traffic product; improve reliability and developer experience.',
@@ -60,6 +79,7 @@ export const experience = [
   {
     role: 'Full Stack Developer',
     company: 'Startup / Product team',
+    companyUrl: 'https://example.com',
     period: '2020 — 2023',
     summary:
       'Built customer-facing features and internal tools in a fast-moving environment.',
