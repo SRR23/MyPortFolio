@@ -13,9 +13,18 @@
 
   body {
     @apply bg-slate-950 font-sans text-slate-300 antialiased;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   ::selection {
     @apply bg-teal-500/30 text-white;
+  }
+
+  /* Faster, cleaner taps on mobile */
+  button,
+  a {
+    touch-action: manipulation;
   }
 }

@@ -195,6 +195,27 @@ export default function App() {
     document.title = `${profile.name} · ${profile.title}`
   }, [])
 
+  useEffect(() => {
+    const root = document.documentElement
+    if (mobileOpen) {
+      root.style.overflow = 'hidden'
+    } else {
+      root.style.overflow = ''
+    }
+    return () => {
+      root.style.overflow = ''
+    }
+  }, [mobileOpen])
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') setMobileOpen(false)
+    }
+    if (!mobileOpen) return
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [mobileOpen])
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-300">
       {/* Subtle background */}
@@ -207,14 +228,24 @@ export default function App() {
         aria-hidden
       />
 
-      <header className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <header className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/90 pt-[max(0.5rem,env(safe-area-inset-top))] backdrop-blur-md supports-[backdrop-filter]:bg-slate-950/80">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 pb-3 sm:gap-4 sm:px-6 sm:pb-4">
           <a
             href="#top"
-            className="font-semibold tracking-tight text-white transition hover:text-teal-300"
+            className="group min-w-0 max-w-[72%] cursor-pointer sm:max-w-none"
           >
-            {profile.name}
-            <span className="ml-2 font-normal text-slate-500">· {profile.title}</span>
+            <span className="block sm:hidden">
+              <span className="block truncate text-sm font-semibold text-white group-hover:text-teal-300">
+                {profile.name}
+              </span>
+              <span className="mt-0.5 block truncate text-xs text-slate-500">{profile.title}</span>
+            </span>
+            <span className="hidden font-semibold tracking-tight text-white group-hover:text-teal-300 sm:inline">
+              {profile.name}
+              <span className="ml-2 font-normal text-slate-500 group-hover:text-slate-400">
+                · {profile.title}
+              </span>
+            </span>
           </a>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
@@ -222,7 +253,7 @@ export default function App() {
               <a
                 key={link.href}
                 href={link.href}
-                className="rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-white/5 hover:text-white"
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-white/5 hover:text-white"
               >
                 {link.label}
               </a>
@@ -231,7 +262,7 @@ export default function App() {
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-lg p-2 text-slate-300 md:hidden"
+            className="-mr-1 inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg p-2 text-slate-300 transition hover:bg-white/10 hover:text-white md:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             onClick={() => setMobileOpen((v) => !v)}
@@ -240,37 +271,70 @@ export default function App() {
             <MenuIcon open={mobileOpen} />
           </button>
         </div>
+      </header>
 
+      {/* Mobile: slide-in panel from the right */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden ${
+          mobileOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
+      >
         <div
+          className={`absolute inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+            mobileOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          onClick={() => setMobileOpen(false)}
+          aria-hidden
+        />
+        <aside
           id="mobile-nav"
-          className={`border-t border-white/5 bg-slate-950/95 md:hidden ${
-            mobileOpen ? 'block' : 'hidden'
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          className={`absolute right-0 top-0 flex h-full max-h-[100dvh] w-[min(88vw,20rem)] flex-col border-l border-white/10 bg-slate-950 shadow-[-12px_0_48px_rgba(0,0,0,0.45)] transition-transform duration-300 ease-out ${
+            mobileOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
-          <nav className="flex flex-col px-4 py-3" aria-label="Mobile">
+          <div className="flex shrink-0 items-center justify-between border-b border-white/5 px-4 py-4 pt-[max(1rem,env(safe-area-inset-top))]">
+            <span className="text-sm font-semibold uppercase tracking-wider text-teal-400/90">
+              Menu
+            </span>
+            <button
+              type="button"
+              className="inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg p-2 text-slate-400 transition hover:bg-white/10 hover:text-white"
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
+            >
+              <MenuIcon open />
+            </button>
+          </div>
+          <nav
+            className="flex flex-1 flex-col overflow-y-auto px-3 py-2 pb-[max(1rem,env(safe-area-inset-bottom))]"
+            aria-label="Mobile"
+          >
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="rounded-lg px-3 py-3 text-sm text-slate-300 hover:bg-white/5 hover:text-white"
+                className="cursor-pointer rounded-xl px-4 py-3.5 text-base text-slate-300 transition hover:bg-teal-500/10 hover:text-white active:bg-white/10"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </a>
             ))}
           </nav>
-        </div>
-      </header>
+        </aside>
+      </div>
 
       <main id="top">
         {/* Hero */}
-        <section className="relative overflow-hidden border-b border-white/5 px-4 pb-20 pt-16 sm:px-6 sm:pt-24">
-          <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.1fr_minmax(0,0.9fr)] lg:items-center lg:gap-16">
-            <div>
-              <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-teal-300/90">
+        <section className="relative overflow-hidden border-b border-white/5 px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-20 lg:pt-24">
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 lg:grid-cols-[1.1fr_minmax(0,0.9fr)] lg:items-center lg:gap-16">
+            <div className="lg:order-1">
+              <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-[11px] font-medium uppercase tracking-wider text-teal-300/90 sm:mb-4 sm:text-xs">
                 Open to opportunities
               </p>
-              <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]">
+              <h1 className="text-[1.7rem] font-semibold leading-snug tracking-tight text-white sm:text-4xl sm:leading-tight lg:text-[3.25rem] lg:leading-[1.1]">
                 Hi, I&apos;m{' '}
                 <span className="bg-gradient-to-r from-teal-300 to-cyan-400 bg-clip-text text-transparent">
                   {profile.name}
@@ -279,35 +343,35 @@ export default function App() {
                 <br />
                 {profile.title}.
               </h1>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-400 sm:mt-6 sm:text-lg">
                 {profile.tagline}
               </p>
-              <p className="mt-2 text-sm text-slate-500">{profile.location}</p>
-              <div className="mt-10 flex flex-wrap gap-4">
+              <p className="mt-2 text-xs text-slate-500 sm:text-sm">{profile.location}</p>
+              <div className="mt-8 flex flex-row flex-wrap gap-2 sm:mt-10 sm:gap-4">
                 <a
                   href="#projects"
-                  className="inline-flex items-center justify-center rounded-xl bg-teal-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-teal-500/20 transition hover:bg-teal-400"
+                  className="inline-flex min-h-[44px] flex-1 basis-0 items-center justify-center rounded-xl bg-teal-500 px-2 py-2.5 text-center text-[11px] font-semibold leading-tight text-slate-950 shadow-lg shadow-teal-500/20 transition hover:bg-teal-400 active:bg-teal-400/90 sm:min-h-0 sm:flex-none sm:px-6 sm:py-3 sm:text-sm"
                 >
                   View projects
                 </a>
                 <a
                   href="#contact"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-teal-500/40 hover:bg-white/[0.07]"
+                  className="inline-flex min-h-[44px] flex-1 basis-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-2 py-2.5 text-center text-[11px] font-semibold leading-tight text-white transition hover:border-teal-500/40 hover:bg-white/[0.07] active:bg-white/10 sm:min-h-0 sm:flex-none sm:px-6 sm:py-3 sm:text-sm"
                 >
                   Get in touch
                 </a>
                 <a
                   href={profile.resume.publicPath}
                   download={profile.resume.downloadFileName}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-teal-500/40 hover:bg-white/[0.07]"
+                  className="inline-flex min-h-[44px] flex-1 basis-0 items-center justify-center gap-1 rounded-xl border border-white/10 bg-white/5 px-1.5 py-2.5 text-center text-[10px] font-semibold leading-tight text-white transition hover:border-teal-500/40 hover:bg-white/[0.07] active:bg-white/10 sm:min-h-0 sm:flex-none sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
                 >
-                  <DownloadIcon />
+                  <DownloadIcon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                   Download resume
                 </a>
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[min(100%,20rem)] lg:max-w-none lg:justify-self-end">
+            <div className="relative mx-auto hidden w-full max-w-[16.5rem] sm:max-w-xs lg:order-2 lg:block lg:max-w-none lg:justify-self-end">
               {/* Ambient glow behind portrait */}
               <div
                 className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-teal-500/25 via-teal-600/5 to-cyan-500/15 blur-3xl"
@@ -335,16 +399,16 @@ export default function App() {
         {/* About */}
         <section
           id="about"
-          className="scroll-mt-24 border-b border-white/5 px-4 py-20 sm:px-6"
+          className="scroll-mt-20 border-b border-white/5 px-4 py-14 sm:scroll-mt-24 sm:px-6 sm:py-20"
         >
           <div className="mx-auto max-w-5xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
               About
             </h2>
-            <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+            <p className="mt-3 max-w-2xl text-xl font-medium tracking-tight text-white sm:text-2xl lg:text-3xl">
               Building software that lasts.
             </p>
-            <div className="mt-8 max-w-3xl space-y-4 text-base leading-relaxed text-slate-400">
+            <div className="mt-6 max-w-3xl space-y-4 text-[0.9375rem] leading-relaxed text-slate-400 sm:mt-8 sm:text-base">
               {aboutParagraphs.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
@@ -355,20 +419,20 @@ export default function App() {
         {/* Education */}
         <section
           id="education"
-          className="scroll-mt-24 border-b border-white/5 px-4 py-20 sm:px-6"
+          className="scroll-mt-20 border-b border-white/5 px-4 py-14 sm:scroll-mt-24 sm:px-6 sm:py-20"
         >
           <div className="mx-auto max-w-5xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
               Education
             </h2>
-            <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+            <p className="mt-3 max-w-2xl text-xl font-medium tracking-tight text-white sm:text-2xl lg:text-3xl">
               Academic qualifications.
             </p>
             <ul className="mt-10 space-y-6">
               {education.map((entry, index) => (
                 <li
                   key={index}
-                  className="rounded-2xl border border-white/5 bg-slate-900/40 p-6 shadow-lg shadow-black/20"
+                  className="rounded-2xl border border-white/5 bg-slate-900/40 p-5 shadow-lg shadow-black/20 sm:p-6"
                 >
                   <h3 className="text-lg font-semibold leading-snug text-white">
                     {entry.degree}
@@ -384,20 +448,20 @@ export default function App() {
         {/* Expertise */}
         <section
           id="expertise"
-          className="scroll-mt-24 border-b border-white/5 px-4 py-20 sm:px-6"
+          className="scroll-mt-20 border-b border-white/5 px-4 py-14 sm:scroll-mt-24 sm:px-6 sm:py-20"
         >
           <div className="mx-auto max-w-5xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
               Expertise
             </h2>
-            <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+            <p className="mt-3 max-w-2xl text-xl font-medium tracking-tight text-white sm:text-2xl lg:text-3xl">
               Skills across the stack.
             </p>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-6">
               {expertise.map((group) => (
                 <div
                   key={group.category}
-                  className="rounded-2xl border border-white/5 bg-slate-900/40 p-6 shadow-lg shadow-black/20"
+                  className="rounded-2xl border border-white/5 bg-slate-900/40 p-5 shadow-lg shadow-black/20 sm:p-6"
                 >
                   <h3 className="text-sm font-semibold text-white">{group.category}</h3>
                   <ul className="mt-4 flex flex-wrap gap-2">
@@ -419,23 +483,23 @@ export default function App() {
         {/* Experience */}
         <section
           id="experience"
-          className="scroll-mt-24 border-b border-white/5 px-4 py-20 sm:px-6"
+          className="scroll-mt-20 border-b border-white/5 px-4 py-14 sm:scroll-mt-24 sm:px-6 sm:py-20"
         >
           <div className="mx-auto max-w-5xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
               Experience
             </h2>
-            <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+            <p className="mt-3 max-w-2xl text-xl font-medium tracking-tight text-white sm:text-2xl lg:text-3xl">
               Where I&apos;ve made an impact.
             </p>
-            <ol className="relative mt-14 border-l border-white/10 pl-8">
+            <ol className="relative mt-10 border-l border-white/10 pl-6 sm:mt-14 sm:pl-8">
               {experience.map((job) => (
                 <li
                   key={`${job.company}-${job.period}`}
-                  className="relative pb-12 last:pb-0"
+                  className="relative pb-10 last:pb-0 sm:pb-12"
                 >
-                  <span className="absolute -left-[9px] top-2 z-[1] h-4 w-4 rounded-full border-2 border-teal-400 bg-slate-950 ring-4 ring-slate-950" />
-                  <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-6 shadow-lg shadow-black/10">
+                  <span className="absolute -left-[7px] top-2 z-[1] h-3.5 w-3.5 rounded-full border-2 border-teal-400 bg-slate-950 ring-2 ring-slate-950 sm:-left-[9px] sm:h-4 sm:w-4 sm:ring-4" />
+                  <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-5 shadow-lg shadow-black/10 sm:p-6">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                       <div className="min-w-0">
                         <h3 className="text-lg font-semibold leading-snug text-white">
@@ -462,7 +526,7 @@ export default function App() {
                       </p>
                     </div>
                     <p className="mt-4 text-slate-400 leading-relaxed">{job.summary}</p>
-                    <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-400 marker:text-teal-500/80">
+                    <ul className="mt-4 list-outside list-disc space-y-2.5 pl-4 text-sm leading-relaxed text-slate-400 marker:text-teal-500/80 sm:pl-5">
                       {job.highlights.map((point, index) => (
                         <li key={index}>
                           <ExperienceHighlight point={point} />
@@ -479,23 +543,23 @@ export default function App() {
         {/* Projects */}
         <section
           id="projects"
-          className="scroll-mt-24 border-b border-white/5 px-4 py-20 sm:px-6"
+          className="scroll-mt-20 border-b border-white/5 px-4 py-14 sm:scroll-mt-24 sm:px-6 sm:py-20"
         >
           <div className="mx-auto max-w-5xl">
             <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
               Projects
             </h2>
-            <p className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+            <p className="mt-3 max-w-2xl text-xl font-medium tracking-tight text-white sm:text-2xl lg:text-3xl">
               Selected work & side projects.
             </p>
-            <div className="mt-12 grid gap-8 lg:grid-cols-3">
+            <div className="mt-10 grid gap-6 sm:mt-12 lg:grid-cols-3 lg:gap-8">
               {projects.map((project) => (
                 <article
                   key={project.title}
-                  className="group flex flex-col rounded-2xl border border-white/5 bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-6 shadow-lg transition hover:border-teal-500/20 hover:shadow-teal-500/5"
+                  className="group flex flex-col rounded-2xl border border-white/5 bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-5 shadow-lg transition active:border-teal-500/30 sm:p-6 sm:hover:border-teal-500/20 sm:hover:shadow-teal-500/5"
                 >
-                  <h3 className="text-lg font-semibold text-white">{project.title}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
+                  <h3 className="text-base font-semibold text-white sm:text-lg">{project.title}</h3>
+                  <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-slate-400 sm:text-sm">
                     {project.description}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -539,60 +603,63 @@ export default function App() {
         </section>
 
         {/* Contact */}
-        <section id="contact" className="scroll-mt-24 px-4 py-20 sm:px-6">
+        <section
+          id="contact"
+          className="scroll-mt-20 px-4 py-14 sm:scroll-mt-24 sm:px-6 sm:py-20"
+        >
           <div className="mx-auto max-w-5xl">
-            <div className="overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/90 via-slate-950 to-slate-950 p-8 sm:p-12">
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/90 via-slate-950 to-slate-950 p-6 sm:rounded-3xl sm:p-12">
               <h2 className="text-sm font-semibold uppercase tracking-widest text-teal-400/90">
                 Contact
               </h2>
-              <p className="mt-3 max-w-xl text-2xl font-medium tracking-tight text-white sm:text-3xl">
+              <p className="mt-3 max-w-xl text-xl font-medium tracking-tight text-white sm:text-2xl lg:text-3xl">
                 Let&apos;s build something great.
               </p>
-              <p className="mt-4 max-w-xl text-slate-400">
+              <p className="mt-4 max-w-xl text-[0.9375rem] leading-relaxed text-slate-400 sm:text-base">
                 Prefer email? Reach out anytime — I typically respond within a few business days.
               </p>
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <a
                   href={`mailto:${profile.email}`}
-                  className="inline-flex justify-center rounded-xl bg-teal-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-teal-400 sm:justify-start"
+                  className="inline-flex min-h-[44px] w-full items-center justify-center break-all rounded-xl bg-teal-500 px-4 py-3 text-center text-xs font-semibold text-slate-950 transition hover:bg-teal-400 active:bg-teal-400/90 sm:w-auto sm:min-h-0 sm:justify-start sm:px-6 sm:text-sm"
                 >
                   {profile.email}
                 </a>
                 <a
                   href={profile.resume.publicPath}
                   download={profile.resume.downloadFileName}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-teal-500/40 hover:bg-white/[0.07]"
+                  className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-teal-500/40 hover:bg-white/[0.07] active:bg-white/10 sm:w-auto sm:min-h-0"
                 >
                   <DownloadIcon />
                   Download resume
                 </a>
               </div>
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-row flex-wrap gap-2 sm:mt-10 sm:gap-4">
                 <a
                   href={profile.social.github}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-teal-500/40 hover:bg-white/5"
+                  className="inline-flex min-h-[44px] flex-1 basis-0 items-center justify-center gap-1.5 rounded-xl border border-white/10 px-2 py-2.5 text-[11px] font-medium leading-tight text-slate-200 transition hover:border-teal-500/40 hover:bg-white/5 active:bg-white/10 sm:min-h-0 sm:flex-none sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
-                  <GitHubIcon className="h-4 w-4 text-slate-300" />
+                  <GitHubIcon className="h-3.5 w-3.5 shrink-0 text-slate-300 sm:h-4 sm:w-4" />
                   GitHub
                 </a>
                 <a
                   href={profile.social.linkedin}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-teal-500/40 hover:bg-white/5"
+                  className="inline-flex min-h-[44px] flex-1 basis-0 items-center justify-center gap-1.5 rounded-xl border border-white/10 px-2 py-2.5 text-[11px] font-medium leading-tight text-slate-200 transition hover:border-teal-500/40 hover:bg-white/5 active:bg-white/10 sm:min-h-0 sm:flex-none sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
-                  <LinkedInIcon className="h-4 w-4 text-[#0A66C2]" />
+                  <LinkedInIcon className="h-3.5 w-3.5 shrink-0 text-[#0A66C2] sm:h-4 sm:w-4" />
                   LinkedIn
                 </a>
                 <a
                   href={profile.social.whatsapp}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-teal-500/40 hover:bg-white/5"
+                  className="inline-flex min-h-[44px] flex-1 basis-0 items-center justify-center gap-1.5 rounded-xl border border-white/10 px-2 py-2.5 text-[11px] font-medium leading-tight text-slate-200 transition hover:border-teal-500/40 hover:bg-white/5 active:bg-white/10 sm:min-h-0 sm:flex-none sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
                 >
-                  <WhatsAppIcon className="h-4 w-4 text-emerald-400/90" />
+                  <WhatsAppIcon className="h-3.5 w-3.5 shrink-0 text-emerald-400/90 sm:h-4 sm:w-4" />
                   WhatsApp
                 </a>
               </div>
@@ -601,7 +668,7 @@ export default function App() {
         </section>
       </main>
 
-      <footer className="border-t border-white/5 px-4 py-10 sm:px-6">
+      <footer className="border-t border-white/5 px-4 py-8 sm:px-6 sm:py-10">
         <div className="mx-auto max-w-5xl text-center text-sm text-slate-500 sm:text-left">
           <p>
             © {new Date().getFullYear()} {profile.name}. All rights reserved.

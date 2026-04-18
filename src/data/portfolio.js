@@ -46,7 +46,7 @@ export const aboutParagraphs = [
 export const expertise = [
   {
     category: 'Languages & runtime',
-    items: ['C', 'C++', 'Python', 'JavaScript'],
+    items: ['C', 'C++', 'Python', 'JavaScript', 'OOP', "DSA"],
   },
   {
     category: 'Frontend',
