@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/* Typography: DM Sans + JetBrains Mono (loaded in index.html) */
+@theme {
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-950 font-sans text-slate-300 antialiased;
+  }
+
+  ::selection {
+    @apply bg-teal-500/30 text-white;
+  }
+}
