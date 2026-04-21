@@ -111,7 +111,7 @@ export const projects = [
     title: 'InvoiceFlow',
     description:
       'SaaS-style invoicing and billing app: Django REST Framework APIs with async jobs (Celery + Redis), PostgreSQL for data, and a React front end. Supports real payment flows via Stripe and SSLCommerz so businesses can create invoices, track status, and get paid online.',
-    tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Celery', 'Redis', 'Stripe', 'SSLCommerz', 'Google OAuth'],
+    tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Celery', 'Redis', 'Stripe', 'SSLCommerz', 'Google OAuth', 'Resend'],
     links: { repo: 'https://github.com/SRR23/InvoiceFlow.git', live: 'https://invoiceflow-v1.netlify.app/' },
   },
   {
