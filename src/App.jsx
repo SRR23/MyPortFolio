@@ -173,8 +173,8 @@ function ExperienceHighlight({ point }) {
   )
 }
 
-/** Auto-scrolling tech strip for the footer (two identical segments for a seamless -50% loop). */
-function FooterTechTicker({ items }) {
+/** Auto-scrolling tech strip (two identical segments for a seamless -50% loop). */
+function FooterTechTicker({ items, className = '' }) {
   if (items.length === 0) return null
 
   const pillClass =
@@ -190,7 +190,7 @@ function FooterTechTicker({ items }) {
 
   return (
     <div
-      className="relative w-full min-w-0 max-w-full overflow-hidden rounded-full border border-white/[0.08] bg-[#09090b]/70 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:max-w-[min(100%,24rem)] sm:shrink-0 sm:py-2"
+      className={`relative w-full min-w-0 max-w-full overflow-hidden rounded-full border border-white/[0.08] bg-[#09090b]/70 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:py-2 ${className}`.trim()}
       aria-label="Technologies"
     >
       <div
@@ -366,9 +366,15 @@ export default function App() {
         <section className="relative overflow-hidden border-b border-white/5 px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-20 lg:pt-24">
           <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 lg:grid-cols-[1.1fr_minmax(0,0.9fr)] lg:items-center lg:gap-16">
             <div className="lg:order-1">
-              <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-[11px] font-medium uppercase tracking-wider text-teal-300/90 sm:mb-4 sm:text-xs">
-                Open to opportunities
-              </p>
+              <div className="mb-3 space-y-3 sm:mb-4 sm:space-y-3.5">
+                <FooterTechTicker
+                  items={footerTickerTech}
+                  className="max-w-full sm:max-w-xl"
+                />
+                <p className="inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-[11px] font-medium uppercase tracking-wider text-teal-300/90 sm:text-xs">
+                  Open to opportunities
+                </p>
+              </div>
               <h1 className="text-[1.7rem] font-semibold leading-snug tracking-tight text-white sm:text-4xl sm:leading-tight lg:text-[3.25rem] lg:leading-[1.1]">
                 Hi, I&apos;m{' '}
                 <span className="bg-gradient-to-r from-teal-300 to-cyan-400 bg-clip-text text-transparent">
@@ -708,7 +714,10 @@ export default function App() {
           <p className="shrink-0 text-center text-sm text-slate-500 sm:text-left">
             © {new Date().getFullYear()} {profile.name}. All rights reserved.
           </p>
-          <FooterTechTicker items={footerTickerTech} />
+          <FooterTechTicker
+            items={footerTickerTech}
+            className="sm:max-w-[min(100%,24rem)] sm:shrink-0"
+          />
         </div>
       </footer>
       </div>
