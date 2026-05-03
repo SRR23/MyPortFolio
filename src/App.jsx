@@ -600,9 +600,11 @@ export default function App() {
                   className="group flex flex-col rounded-2xl border border-white/5 bg-gradient-to-b from-slate-900/80 to-slate-950/80 p-5 shadow-lg transition active:border-teal-500/30 sm:p-6 sm:hover:border-teal-500/20 sm:hover:shadow-teal-500/5"
                 >
                   <h3 className="text-base font-semibold text-white sm:text-lg">{project.title}</h3>
-                  <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-slate-400 sm:text-sm">
-                    {project.description}
-                  </p>
+                  <ul className="mt-3 flex-1 list-outside list-disc space-y-2.5 pl-4 text-[0.9375rem] leading-relaxed text-slate-400 marker:text-teal-500/80 sm:pl-5 sm:text-sm">
+                    {project.highlights.map((point, index) => (
+                      <li key={`${project.title}-${index}`}>{point}</li>
+                    ))}
+                  </ul>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {project.tech.map((t) => (
                       <span

@@ -109,22 +109,34 @@ export const experience = [
 export const projects = [
   {
     title: 'InvoiceFlow',
-    description:
-      'SaaS-style invoicing and billing app: Django REST Framework APIs with async jobs (Celery + Redis), PostgreSQL for data, and a React front end. Supports real payment flows via Stripe and SSLCommerz so businesses can create invoices, track status, and get paid online.',
+    highlights: [
+      'SaaS-style invoicing: create invoices, track status, and manage billing in a React UI backed by Django REST Framework.',
+      'Async work with Celery and Redis so heavy jobs (email, webhooks, reminders) do not block the API.',
+      'Real payments via Stripe and SSLCommerz so businesses can get paid online, not just demo flows.',
+      'PostgreSQL for durable data; JWT plus Google OAuth for sign-in; Resend for transactional email.',
+    ],
     tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Celery', 'Redis', 'Stripe', 'SSLCommerz', 'Google OAuth', 'Resend'],
     links: { repo: 'https://github.com/SRR23/InvoiceFlow.git', live: 'https://invoiceflow-v1.netlify.app/' },
   },
   {
     title: 'Blogtopia',
-    description:
-      'Full-stack blog platform backed by a Django REST API and a React client. Authors can publish and manage posts; MySQL stores content and metadata. Focused on clean CRUD, auth-aware routes, and a simple reading experience on the live site.',
+    highlights: [
+      'Full-stack blog: Django REST API plus React client for authors to publish and manage posts.',
+      'JWT-aware routes so editing and publishing stay protected while the public site stays readable.',
+      'MySQL for posts and metadata with predictable CRUD instead of ad-hoc queries.',
+      'Live Netlify build tuned for a simple reading experience — fast lists and clean article layout.',
+    ],
     tech: ['Django', 'React', 'MySQL', 'JWT'],
     links: { repo: 'https://github.com/SRR23/Blog-Website-API', live: 'https://blogtopia.netlify.app/' },
   },
   {
     title: 'EasyRent',
-    description:
-      'Rental marketplace for listing and discovering flats: Django + PostgreSQL for listings, users, and bookings, React for the UI, and Cloudinary for optimized property images. Built to showcase search-friendly listings and a straightforward renter flow in the Kushtia deployment.',
+    highlights: [
+      'Rental marketplace: Django and PostgreSQL for listings, users, and booking-style flows; React for discovery and detail views.',
+      'Cloudinary for optimized property photos so galleries stay fast on slower connections.',
+      'Search-friendly listing model so renters can filter and scan flats without clutter.',
+      'Kushtia-focused deployment to show a realistic local renter journey end to end.',
+    ],
     tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Cloudinary'],
     links: { repo: 'https://github.com/SRR23/Flat-Rent-API.git', live: 'https://easyrent-kushtia.netlify.app/' },
   },
