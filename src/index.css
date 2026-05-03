@@ -76,6 +76,25 @@
   }
 }
 
+@keyframes footer-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.footer-marquee-track {
+  animation: footer-marquee 55s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-marquee-track {
+    animation: none;
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

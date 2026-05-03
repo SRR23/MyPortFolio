@@ -18,6 +18,9 @@ const navLinks = [
   { href: '#contact', label: 'Contact' },
 ]
 
+/** Unique tech names from Expertise — drives the footer auto-scroll ticker */
+const footerTickerTech = [...new Set(expertise.flatMap((group) => group.items))]
+
 function MenuIcon({ open }) {
   return (
     <span className="relative block h-3.5 w-5" aria-hidden>
@@ -167,6 +170,44 @@ function ExperienceHighlight({ point }) {
       <span className="text-slate-500"> — </span>
       {point.detail}
     </>
+  )
+}
+
+/** Auto-scrolling tech strip for the footer (two identical segments for a seamless -50% loop). */
+function FooterTechTicker({ items }) {
+  if (items.length === 0) return null
+
+  const pillClass =
+    'shrink-0 rounded-md border border-white/10 bg-white/[0.05] px-2 py-1 font-mono text-[10px] tracking-wide text-slate-400 sm:text-[11px]'
+  const segmentClass = 'flex shrink-0 items-center gap-2 pr-4 sm:gap-2.5 sm:pr-6'
+
+  const segment = (copyPrefix) =>
+    items.map((name) => (
+      <span key={`${copyPrefix}-${name}`} className={pillClass}>
+        {name}
+      </span>
+    ))
+
+  return (
+    <div
+      className="relative w-full min-w-0 max-w-full overflow-hidden rounded-full border border-white/[0.08] bg-[#09090b]/70 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:max-w-[min(100%,24rem)] sm:shrink-0 sm:py-2"
+      aria-label="Technologies"
+    >
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-8 bg-gradient-to-r from-[#09090b] via-[#09090b]/90 to-transparent sm:w-10"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-8 bg-gradient-to-l from-[#09090b] via-[#09090b]/90 to-transparent sm:w-10"
+        aria-hidden
+      />
+      <div className="footer-marquee-track flex w-max will-change-transform">
+        <div className={segmentClass}>{segment('a')}</div>
+        <div className={segmentClass} aria-hidden>
+          {segment('b')}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -663,10 +704,11 @@ export default function App() {
       </main>
 
       <footer className="border-t border-white/5 px-4 py-8 sm:px-6 sm:py-10">
-        <div className="mx-auto max-w-5xl text-center text-sm text-slate-500 sm:text-left">
-          <p>
+        <div className="mx-auto flex max-w-5xl flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <p className="shrink-0 text-center text-sm text-slate-500 sm:text-left">
             © {new Date().getFullYear()} {profile.name}. All rights reserved.
           </p>
+          <FooterTechTicker items={footerTickerTech} />
         </div>
       </footer>
       </div>
