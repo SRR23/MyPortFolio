@@ -7,6 +7,7 @@ import {
   experience,
   projects,
 } from './data/portfolio.js'
+import AmbientBackground from './components/AmbientBackground.jsx'
 
 const navLinks = [
   { href: '#about', label: 'About' },
@@ -217,18 +218,11 @@ export default function App() {
   }, [mobileOpen])
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300">
-      {/* Subtle background */}
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(45,212,191,0.12),transparent)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(to_bottom,transparent,rgba(15,23,42,0.4))]"
-        aria-hidden
-      />
+    <div className="relative min-h-screen text-slate-300">
+      <AmbientBackground />
 
-      <header className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/90 pt-[max(0.5rem,env(safe-area-inset-top))] backdrop-blur-md supports-[backdrop-filter]:bg-slate-950/80">
+      <div className="relative z-10">
+      <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-[#09090b]/88 pt-[max(0.5rem,env(safe-area-inset-top))] backdrop-blur-md supports-[backdrop-filter]:bg-[#09090b]/78">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 pb-3 sm:gap-4 sm:px-6 sm:pb-4">
           <a
             href="#top"
@@ -675,6 +669,7 @@ export default function App() {
           </p>
         </div>
       </footer>
+      </div>
     </div>
   )
 }
