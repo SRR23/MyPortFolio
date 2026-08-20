@@ -54,7 +54,7 @@ export const expertise = [
   },
   {
     category: 'Backend & data',
-    items: ['Django', 'PostgreSQL', 'MySQL', 'Signal', 'Celery', 'Redis', 'Cron jobs', 'Stripe', 'Rapyd', 'SSLCommerz'],
+    items: ['Django', 'PostgreSQL', 'MySQL', 'Signal', 'Celery', 'Redis', 'Cron jobs', 'Stripe', 'Rapyd', 'Teya', 'SSLCommerz'],
   },
   {
     category: 'Platform & delivery',
