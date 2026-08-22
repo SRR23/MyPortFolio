@@ -87,7 +87,7 @@ export const experience = [
           href: 'https://nanis.co.uk/',
         },
         detail:
-          'Built voucher flows with strong server-side validation and contributed to broader SaaS functionality.',
+          'Built offer, voucher, reviews and payment flows with strong server-side validation and contributed to broader SaaS functionality.',
       },
     ],
   },
