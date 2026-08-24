@@ -58,7 +58,7 @@ export const expertise = [
   },
   {
     category: 'Platform & delivery',
-    items: ['Cloudflare', 'Git', 'cPanel', 'Docker', 'Netlify', 'Vercel', 'Render'],
+    items: ['Cloudflare', 'Git', 'cPanel', 'Docker', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
   },
 ]
 
