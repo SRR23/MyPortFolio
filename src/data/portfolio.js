@@ -54,11 +54,11 @@ export const expertise = [
   },
   {
     category: 'Backend & data',
-    items: ['Django', 'PostgreSQL', 'MySQL', 'Signal', 'Celery', 'Redis', 'Cron jobs', 'Stripe', 'Rapyd', 'Teya', 'SSLCommerz'],
+    items: ['Django', 'PostgreSQL', 'MySQL', 'Django Signal', 'Celery', 'Redis', 'Cron jobs', 'Stripe', 'Rapyd', 'Teya', 'Opayo'],
   },
   {
     category: 'Platform & delivery',
-    items: ['Cloudflare', 'Git', 'cPanel', 'Docker', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
+    items: ['Cloudflare', 'Github', 'cPanel', 'Docker', 'CI/CD', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
   },
 ]
 
