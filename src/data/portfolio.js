@@ -79,7 +79,7 @@ export const experience = [
           href: 'https://kaaruj.com/',
         },
         detail:
-          'Delivered backend for voucher system, sales reporting, role management, dynamic banners, corporate slider, blog, and related features.',
+          'Delivered backend for voucher system, gift-card features, sales reporting, role management, dynamic banners, corporate slider, blog, and related features.',
       },
       {
         projectLink: {
@@ -112,10 +112,10 @@ export const projects = [
     highlights: [
       'SaaS-style invoicing: create invoices, track status, and manage billing in a React UI backed by Django REST Framework.',
       'Async work with Celery and Redis so heavy jobs (email, webhooks, reminders) do not block the API.',
-      'Real payments via Stripe and SSLCommerz so businesses can get paid online, not just demo flows.',
+      'Real payments via Stripe so businesses can get paid online, not just demo flows.',
       'PostgreSQL for durable data; JWT plus Google OAuth for sign-in; Resend for transactional email.',
     ],
-    tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Celery', 'Redis', 'Stripe', 'SSLCommerz', 'Google OAuth', 'Resend'],
+    tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Docker', 'Celery', 'Redis', 'Stripe', 'Google OAuth', 'Resend'],
     links: { repo: 'https://github.com/SRR23/InvoiceFlow.git', live: 'https://invoiceflow-v1.netlify.app/' },
   },
   {
