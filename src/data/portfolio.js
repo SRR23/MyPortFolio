@@ -58,7 +58,7 @@ export const expertise = [
   },
   {
     category: 'Platform & delivery',
-    items: ['Cloudflare', 'Github', 'cPanel', 'Docker', 'CI/CD', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
+    items: ['Cloudflare', 'Github', 'cPanel', 'Docker', 'CI/CD', 'Github Actions', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
   },
 ]
 
@@ -115,7 +115,7 @@ export const projects = [
       'Real payments via Stripe so businesses can get paid online, not just demo flows.',
       'PostgreSQL for durable data; JWT plus Google OAuth for sign-in; Resend for transactional email.',
     ],
-    tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Docker', 'Celery', 'Redis', 'Stripe', 'Google OAuth', 'Resend'],
+    tech: ['Django', 'React', 'PostgreSQL', 'JWT', 'Docker', 'CI/CD', 'Celery', 'Redis', 'Stripe', 'Google OAuth', 'Resend'],
     links: { repo: 'https://github.com/SRR23/InvoiceFlow.git', live: 'https://invoiceflow-v1.netlify.app/' },
   },
   {
