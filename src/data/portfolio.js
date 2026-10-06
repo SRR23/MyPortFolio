@@ -58,7 +58,7 @@ export const expertise = [
   },
   {
     category: 'Platform & delivery',
-    items: ['Cloudflare', 'Github', 'cPanel', 'Docker', 'CI/CD', 'Github Actions', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
+    items: ['Cloudflare', 'Github', 'cPanel', 'Docker', 'CI/CD', 'Github Actions', 'Sentry', 'Dokploy', 'Netlify', 'Vercel', 'Render'],
   },
 ]
 
@@ -79,7 +79,7 @@ export const experience = [
           href: 'https://kaaruj.com/',
         },
         detail:
-          'Delivered backend for voucher system, gift-card features, sales reporting, role management, dynamic banners, corporate slider, blog, and related features.',
+          'Delivered backend for voucher system, gift-card features, sales reporting, order sheets, outlet, role management, dynamic banners, corporate slider, blog, and related features.',
       },
       {
         projectLink: {
